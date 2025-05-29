@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>提交优化建议</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            max-width: 600px; /* Smaller max-width for mobile feel */
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .original-prompt {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            min-height: 150px; /* Larger textarea for mobile input */
+        }
+        button {
+            display: block; /* Full width button */
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+         .message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
+        .error {
+            background-color: #f2dede;
+            color: #a94442;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>优化合规培训 Agent 提示词</h1>
+        
+        <!-- 原始提示词展示 -->
+        <div class="original-prompt">
+            <h3>请尝试优化以下提示词：</h3>
+            <p>"请作为一个合规培训 Agent，告诉我关于反洗钱（AML）的基本概念和核心要求。"</p>
+        </div>
+
+        <!-- 优化建议提交表单 -->
+        <form id="answerForm">
+            <div class="form-group">
+                <label for="improvedPrompt">您的优化建议：</label>
+                <textarea id="improvedPrompt" rows="6" required placeholder="请提出更清晰、更具体的提示词，以获得更优质的 Agent 回答..."></textarea>
+            </div>
+            <button type="submit">提交优化建议</button>
+        </form>
+        <div id="messageArea"></div>
+    </div>
+
+    <script>
+        // 提交表单处理
+        document.getElementById('answerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const improvedPrompt = document.getElementById('improvedPrompt').value;
+            
+            // 创建新答案对象
+            const newAnswer = {
+                id: Date.now(),
+                improvedPrompt: improvedPrompt,
+                timestamp: new Date().toLocaleString()
+            };
+            
+            // 获取现有答案列表，如果不存在则初始化空数组
+            let answersList = JSON.parse(localStorage.getItem('promptAnswers')) || [];
+
+            // 添加新答案
+            answersList.push(newAnswer);
+            
+            // 保存到 localStorage
+            localStorage.setItem('promptAnswers', JSON.stringify(answersList));
+            
+            // 清空表单
+            document.getElementById('improvedPrompt').value = '';
+            
+            // 显示成功消息
+            showMessage('优化建议提交成功！感谢您的贡献！', 'success');
+
+            // 可以在提交成功后选择关闭页面或跳转
+            // setTimeout(() => { window.close(); }, 2000); // 例如：2秒后关闭窗口
+        });
+
+         // 显示消息
+        function showMessage(message, type) {
+            const messageArea = document.getElementById('messageArea');
+            messageArea.innerHTML = ''; // Clear previous messages
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = message;
+            messageArea.appendChild(messageDiv);
+            
+            // Optional: Hide message after a few seconds
+            /*
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 3000);
+            */
+        }
+
+    </script>
+</body>
+</html> 
